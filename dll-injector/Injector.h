@@ -4,8 +4,8 @@ class Injector {
 public:
 	void inject(const std::wstring processName, const std::wstring cDllPath);
 	void free();
-	unsigned long GetProcessIdFromProcessName(const std::wstring processName);
-	unsigned long GetMainThreadIdFromProcessHandle(HANDLE hProcess);
+	unsigned long GetProcessIdFromProcessName(const std::wstring processName) const;
+	unsigned long GetMainThreadIdFromProcessHandle(HANDLE hProcess) const;
 	virtual ~Injector();
 	Injector(Injector const &) = delete;
 	Injector & operator=(Injector const &) = delete;

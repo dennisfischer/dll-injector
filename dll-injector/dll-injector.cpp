@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 void SetDebugPrivilege();
+
 int main()
 {
 	std::wstring target = L"chrome.exe";
@@ -16,23 +17,24 @@ int main()
 	iInjector->free();
 	logInfo(L"Ejected!");
 	delete iInjector;
-    return 0;
+	return 0;
 }
 
 
-void SetDebugPrivilege() {
+void SetDebugPrivilege()
+{
 	HANDLE hProcess = GetCurrentProcess(), hToken;
 	TOKEN_PRIVILEGES priv;
 	LUID luid;
 
 	OpenProcessToken(hProcess, TOKEN_ADJUST_PRIVILEGES, &hToken);
-	LookupPrivilegeValue(0, L"seDebugPrivilege", &luid);
+	LookupPrivilegeValue(nullptr, L"seDebugPrivilege", &luid);
 
 	priv.PrivilegeCount = 1;
 	priv.Privileges[0].Luid = luid;
 	priv.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-	AdjustTokenPrivileges(hToken, false, &priv, 0, 0, 0);
+	AdjustTokenPrivileges(hToken, false, &priv, 0, nullptr, nullptr);
 
-	CloseHandle(hToken); 
+	CloseHandle(hToken);
 	CloseHandle(hProcess);
 }

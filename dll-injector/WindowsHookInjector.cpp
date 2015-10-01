@@ -8,19 +8,19 @@ WindowsHookInjector::~WindowsHookInjector()
 {
 }
 
-void WindowsHookInjector::do_inject(HANDLE hProcess, const std::wstring  cDllPath) {
-	HMODULE hModule = LoadLibrary(cDllPath.c_str());
-	if (hModule == NULL) {
+void WindowsHookInjector::do_inject(HANDLE hProcess, const std::wstring cDllPath) {
+	auto hModule = LoadLibrary(cDllPath.c_str());
+	if (hModule == nullptr) {
 		return logError(L"Failed to load dll for hooking", GetLastError());
 	}
 
-	HOOKPROC hProc = (HOOKPROC)GetProcAddress(hModule, "hookProc");
-	if (hProc == NULL) {
+	auto hProc = HOOKPROC(GetProcAddress(hModule, "hookProc"));
+	if (hProc == nullptr) {
 		return logError(L"Hook function not existing in dll module!", GetLastError());
 	}
 
-	unsigned long threadId = GetMainThreadIdFromProcessHandle(hProcess);
-	if (threadId == NULL) {
+	auto threadId = GetMainThreadIdFromProcessHandle(hProcess);
+	if (threadId == 0) {
 		return logError(L"Failed to find thread id from process handle.", threadId);
 	}
 
@@ -31,13 +31,13 @@ void WindowsHookInjector::do_inject(HANDLE hProcess, const std::wstring  cDllPat
 		logError(L"Failed: ", GetLastError());
 	}
 
-	if (hHook == NULL) {
+	if (hHook == nullptr) {
 		return logError(L"Failed to install hook", GetLastError());
 	}
 }
 
 void WindowsHookInjector::do_free() {
-	if (hHook != NULL) {
+	if (hHook != nullptr) {
 		UnhookWindowsHookEx(hHook);
 	}
 }
