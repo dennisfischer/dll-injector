@@ -4,14 +4,25 @@
 #include "stdafx.h"
 void SetDebugPrivilege();
 
-int main()
+int main(const int argc,const char* argv[])
 {
-	std::wstring target = L"chrome.exe";
+	if (argc != 3)
+	{
+		logError(L"Not enough arguments, requiring 2: <target> <dll>!", argc);
+		system("PAUSE");
+		return 0;
+	}
 
-	logInfo(std::wstring(L"Injecting DLL into ") + target);
+	std::string sTarget(argv[1]);
+	std::wstring wTarget(sTarget.begin(), sTarget.end());
+
+	std::string sDll(argv[2]);
+	std::wstring wDll(sDll.begin(), sDll.end());
+
+	logInfo(std::wstring(L"Injecting DLL into ") + wTarget);
 	//SetDebugPrivilege();
-	Injector* iInjector = new WindowsHookInjector();
-	iInjector->inject(target, L"C:/Users/denni/Documents/Visual Studio 2015/Projects/dll-injector-sample/x64/Debug/dll-injector-sample.dll");
+	Injector* iInjector = new RemoteThreadInjector();
+	iInjector->inject(wTarget, wDll);
 	logInfo(L"Finished injecting");
 	system("PAUSE");
 	iInjector->free();
