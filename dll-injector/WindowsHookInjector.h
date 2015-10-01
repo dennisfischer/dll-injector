@@ -2,11 +2,13 @@
 
 #include "stdafx.h"
 
-class RemoteThreadInjector : public Injector {
+class WindowsHookInjector : public Injector {
 public:
-	RemoteThreadInjector();
-	virtual ~RemoteThreadInjector();
+	WindowsHookInjector();
+	virtual ~WindowsHookInjector();
 private:
 	void do_inject(HANDLE hProcess, const std::wstring cDllPath) final;
 	void do_free() final;
+
+	HHOOK hHook;
 };

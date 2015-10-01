@@ -9,9 +9,17 @@
 
 #include <stdio.h>
 #include <tchar.h>
+#include <string>
 
 
 
 // TODO: Hier auf zusätzliche Header, die das Programm erfordert, verweisen.
-#include "RemoteThreadInjector.h"
+#include <Windows.h>
+#include <iostream>
+
 #include "Injector.h"
+#include "RemoteThreadInjector.h"
+#include "WindowsHookInjector.h"
+#include "Logger.h"
+
+#include <TlHelp32.h>
