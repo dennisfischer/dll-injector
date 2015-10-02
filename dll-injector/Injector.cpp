@@ -9,18 +9,35 @@ Injector::~Injector()
 }
 
 
-void Injector::inject(const std::string cProcessName, const std::string cDllPath)
+HANDLE Injector::CreateProcessHandle(unsigned long dwProcessId)
 {
-	auto dwProcessId = GetProcessIdFromProcessName(cProcessName);
-	if (dwProcessId == 0)
-	{
-		return logError(L"Requested process isn't running!", GetLastError());
-	}
-
 	auto hProcess = OpenProcess(PROCESS_ALL_ACCESS, false, dwProcessId);
 	if (!hProcess)
 	{
 		logError(L"Couldn' t receive process handle", GetLastError());
+		return nullptr;
+	}
+	return hProcess;
+}
+
+HANDLE Injector::CreateProcessHandleByName(const std::string cProcessName)
+{
+	auto dwProcessId = GetProcessIdFromProcessName(cProcessName);
+	if (dwProcessId == 0)
+	{
+		logError(L"Requested process isn't running!", GetLastError());
+		return nullptr;
+	}
+
+	return CreateProcessHandle(dwProcessId);
+}
+
+void Injector::inject(const std::string cProcessName, const std::string cDllPath)
+{
+	auto hProcess = CreateProcessHandleByName(cProcessName);
+	if (hProcess == nullptr)
+	{
+		return;
 	}
 
 	do_inject(hProcess, cDllPath);
@@ -31,9 +48,20 @@ void Injector::inject(const std::string cProcessName, const std::string cDllPath
 	}
 }
 
-void Injector::free()
+void Injector::free(const std::string cProcessName)
 {
-	do_free();
+	auto hProcess = CreateProcessHandleByName(cProcessName);
+	if (hProcess == nullptr)
+	{
+		return;
+	}
+
+	do_free(hProcess);
+
+	if (!CloseHandle(hProcess))
+	{
+		logWarning(L"Couldn't close process handle", GetLastError());
+	}
 }
 
 unsigned long Injector::GetProcessIdFromProcessName(const std::string cProcessName) const
@@ -44,7 +72,6 @@ unsigned long Injector::GetProcessIdFromProcessName(const std::string cProcessNa
 		logError(L"Unable to create toolhelp snapshot!", GetLastError());
 		return 0;
 	}
-
 
 	PROCESSENTRY32 pe;
 	pe.dwSize = sizeof(PROCESSENTRY32);

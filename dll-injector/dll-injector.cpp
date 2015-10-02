@@ -22,7 +22,7 @@ int main(const int argc, const char* argv[])
 	iInjector->inject(sTarget, sDll);
 	logInfo(L"Finished injecting");
 	system("PAUSE");
-	iInjector->free();
+	iInjector->free(sTarget);
 	logInfo(L"Ejected!");
 	delete iInjector;
 	return 0;

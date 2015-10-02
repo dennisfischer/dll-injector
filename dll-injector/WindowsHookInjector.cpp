@@ -42,7 +42,7 @@ void WindowsHookInjector::do_inject(HANDLE hProcess, const std::string cDllPath)
 	}
 }
 
-void WindowsHookInjector::do_free()
+void WindowsHookInjector::do_free(HANDLE hProcess)
 {
 	if (hHook != nullptr)
 	{
