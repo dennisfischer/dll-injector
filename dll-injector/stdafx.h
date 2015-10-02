@@ -12,7 +12,6 @@
 #include <string>
 
 
-
 // TODO: Hier auf zusätzliche Header, die das Programm erfordert, verweisen.
 #include <Windows.h>
 #include <iostream>

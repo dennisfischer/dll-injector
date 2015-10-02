@@ -1,36 +1,43 @@
 #include "stdafx.h"
 
-Injector::Injector() {
-}
-Injector::~Injector() {
-
+Injector::Injector()
+{
 }
 
+Injector::~Injector()
+{
+}
 
-void Injector::inject(const std::wstring processName, const std::wstring cDllPath) {
 
-	auto dwProcessId = GetProcessIdFromProcessName(processName);
-	if (dwProcessId == 0) {
+void Injector::inject(const std::string cProcessName, const std::string cDllPath)
+{
+	auto dwProcessId = GetProcessIdFromProcessName(cProcessName);
+	if (dwProcessId == 0)
+	{
 		return logError(L"Requested process isn't running!", GetLastError());
 	}
 
 	auto hProcess = OpenProcess(PROCESS_ALL_ACCESS, false, dwProcessId);
-	if (!hProcess) {
+	if (!hProcess)
+	{
 		logError(L"Couldn' t receive process handle", GetLastError());
 	}
 
 	do_inject(hProcess, cDllPath);
 
-	if (!CloseHandle(hProcess)) {
+	if (!CloseHandle(hProcess))
+	{
 		logWarning(L"Couldn't close process handle", GetLastError());
 	}
 }
 
-void Injector::free() {
+void Injector::free()
+{
 	do_free();
 }
 
-unsigned long Injector::GetProcessIdFromProcessName(const std::wstring ProcName) const {
+unsigned long Injector::GetProcessIdFromProcessName(const std::string cProcessName) const
+{
 	auto hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 	if (hSnapShot == INVALID_HANDLE_VALUE)
 	{
@@ -45,7 +52,7 @@ unsigned long Injector::GetProcessIdFromProcessName(const std::wstring ProcName)
 	auto retVal = Process32First(hSnapShot, &pe);
 	while (retVal)
 	{
-		if (wcsstr(pe.szExeFile, ProcName.c_str()))
+		if (wcsstr(pe.szExeFile, std::wstring(cProcessName.begin(), cProcessName.end()).c_str()))
 		{
 			return pe.th32ProcessID;
 		}
@@ -54,7 +61,8 @@ unsigned long Injector::GetProcessIdFromProcessName(const std::wstring ProcName)
 	return 0;
 }
 
-unsigned long Injector::GetMainThreadIdFromProcessHandle(HANDLE hProcess) const {
+unsigned long Injector::GetMainThreadIdFromProcessHandle(HANDLE hProcess) const
+{
 	auto hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
 	if (hSnapShot == INVALID_HANDLE_VALUE)
 	{
@@ -68,8 +76,10 @@ unsigned long Injector::GetMainThreadIdFromProcessHandle(HANDLE hProcess) const 
 	te.dwSize = sizeof(THREADENTRY32);
 
 	auto retVal = Thread32First(hSnapShot, &te);
-	while (retVal) {
-		if (te.th32OwnerProcessID == pid) {
+	while (retVal)
+	{
+		if (te.th32OwnerProcessID == pid)
+		{
 			return te.th32ThreadID;
 		}
 		retVal = Thread32Next(hSnapShot, &te);

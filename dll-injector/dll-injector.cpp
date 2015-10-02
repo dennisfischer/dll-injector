@@ -4,7 +4,7 @@
 #include "stdafx.h"
 void SetDebugPrivilege();
 
-int main(const int argc,const char* argv[])
+int main(const int argc, const char* argv[])
 {
 	if (argc != 3)
 	{
@@ -14,15 +14,12 @@ int main(const int argc,const char* argv[])
 	}
 
 	std::string sTarget(argv[1]);
-	std::wstring wTarget(sTarget.begin(), sTarget.end());
-
 	std::string sDll(argv[2]);
-	std::wstring wDll(sDll.begin(), sDll.end());
 
-	logInfo(std::wstring(L"Injecting DLL into ") + wTarget);
-	//SetDebugPrivilege();
+	logInfo(L"Injecting DLL into " + std::wstring(sTarget.begin(), sTarget.end()));
+	SetDebugPrivilege();
 	Injector* iInjector = new RemoteThreadInjector();
-	iInjector->inject(wTarget, wDll);
+	iInjector->inject(sTarget, sDll);
 	logInfo(L"Finished injecting");
 	system("PAUSE");
 	iInjector->free();
