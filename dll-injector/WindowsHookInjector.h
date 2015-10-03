@@ -9,7 +9,7 @@ public:
 	virtual ~WindowsHookInjector();
 private:
 	void do_inject(HANDLE hProcess, const std::string cDllPath) override final;
-	void do_free(HANDLE hProcess) override final;
+	void do_free(HANDLE hProcess, const std::string cDllPath) override final;
 
 	HHOOK hHook = nullptr;
 };

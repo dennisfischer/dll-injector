@@ -48,7 +48,7 @@ void Injector::inject(const std::string cProcessName, const std::string cDllPath
 	}
 }
 
-void Injector::free(const std::string cProcessName)
+void Injector::free(const std::string cProcessName, const std::string cDllPath)
 {
 	auto hProcess = CreateProcessHandleByName(cProcessName);
 	if (hProcess == nullptr)
@@ -56,7 +56,7 @@ void Injector::free(const std::string cProcessName)
 		return;
 	}
 
-	do_free(hProcess);
+	do_free(hProcess, cDllPath);
 
 	if (!CloseHandle(hProcess))
 	{

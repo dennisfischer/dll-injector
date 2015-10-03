@@ -22,9 +22,10 @@ int main(const int argc, const char* argv[])
 	iInjector->inject(sTarget, sDll);
 	logInfo(L"Finished injecting");
 	system("PAUSE");
-	iInjector->free(sTarget);
+	iInjector->free(sTarget, sDll);
 	logInfo(L"Ejected!");
 	delete iInjector;
+	system("PAUSE");
 	return 0;
 }
 
