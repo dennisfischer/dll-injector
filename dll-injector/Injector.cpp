@@ -73,17 +73,17 @@ unsigned long Injector::GetProcessIdFromProcessName(const std::string cProcessNa
 		return 0;
 	}
 
-	PROCESSENTRY32 pe;
-	pe.dwSize = sizeof(PROCESSENTRY32);
+	PROCESSENTRY32W pe;
+	pe.dwSize = sizeof(PROCESSENTRY32W);
 
-	auto retVal = Process32First(hSnapShot, &pe);
+	auto retVal = Process32FirstW(hSnapShot, &pe);
 	while (retVal)
 	{
 		if (wcsstr(pe.szExeFile, std::wstring(cProcessName.begin(), cProcessName.end()).c_str()))
 		{
 			return pe.th32ProcessID;
 		}
-		retVal = Process32Next(hSnapShot, &pe);
+		retVal = Process32NextW(hSnapShot, &pe);
 	}
 	return 0;
 }
