@@ -17,7 +17,7 @@ int main(const int argc, const char* argv[])
 	std::string sDll(argv[2]);
 
 	logInfo(L"Injecting DLL into " + std::wstring(sTarget.begin(), sTarget.end()));
-	SetDebugPrivilege();
+	//SetDebugPrivilege();
 	Injector* iInjector = new RemoteThreadInjector();
 	iInjector->inject(sTarget, sDll);
 	logInfo(L"Finished injecting");
@@ -31,18 +31,31 @@ int main(const int argc, const char* argv[])
 
 void SetDebugPrivilege()
 {
-	HANDLE hProcess = GetCurrentProcess(), hToken;
-	TOKEN_PRIVILEGES priv;
+	auto hProcess = GetCurrentProcess();
+	HANDLE hToken = nullptr;
+
+	DWORD lastError = ERROR_SUCCESS;
+	if(!OpenProcessToken(hProcess, TOKEN_ADJUST_PRIVILEGES, &hToken) || (lastError = GetLastError()) != ERROR_SUCCESS)
+	{
+		logError(L"Couldn't open process token", lastError);
+	}
+
 	LUID luid;
+	if(!LookupPrivilegeValueW(nullptr, SE_DEBUG_NAME, &luid) || (lastError = GetLastError()) != ERROR_SUCCESS)
+	{
+		logError(L"Couldn't find seDebugPrivilege value", lastError);
+	}
 
-	OpenProcessToken(hProcess, TOKEN_ADJUST_PRIVILEGES, &hToken);
-	LookupPrivilegeValueW(nullptr, L"seDebugPrivilege", &luid);
 
+	TOKEN_PRIVILEGES priv;
 	priv.PrivilegeCount = 1;
 	priv.Privileges[0].Luid = luid;
 	priv.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-	AdjustTokenPrivileges(hToken, false, &priv, 0, nullptr, nullptr);
-
+	if(!AdjustTokenPrivileges(hToken, false, &priv, 0, nullptr, nullptr) || (lastError = GetLastError()) != ERROR_SUCCESS)
+	{
+		logError(L"Couldn't adjust debug privileges", lastError);
+	}
+	
 	CloseHandle(hToken);
 	CloseHandle(hProcess);
 }
