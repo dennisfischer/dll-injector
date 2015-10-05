@@ -6,9 +6,9 @@ void SetDebugPrivilege();
 
 int main(const int argc, const char* argv[])
 {
-	if (argc != 3)
+	if (argc != 3 && argc != 4)
 	{
-		logError(L"Not enough arguments, requiring 2: <target> <dll>!", argc);
+		logError(L"Not enough arguments, requiring 2: <target> <dll> [<0|default 1|inject, 2|eject>]!", argc);
 		system("PAUSE");
 		return 0;
 	}
@@ -16,14 +16,34 @@ int main(const int argc, const char* argv[])
 	std::string sTarget(argv[1]);
 	std::string sDll(argv[2]);
 
+	auto option = 0;
+	if(argc == 4)
+	{
+		option = atoi(argv[3]);
+
+		if(option>2 || option < 0)
+		{
+			logError(L"Invalid 3rd parameter given.", option);
+			system("PAUSE");
+			return 0;
+		}
+	}
+
 	logInfo(L"Injecting DLL into " + std::wstring(sTarget.begin(), sTarget.end()));
 	//SetDebugPrivilege();
 	Injector* iInjector = new RemoteThreadInjector();
-	iInjector->inject(sTarget, sDll);
-	logInfo(L"Finished injecting");
-	system("PAUSE");
-	iInjector->free(sTarget, sDll);
-	logInfo(L"Ejected!");
+
+	if (option == 0 || option == 1) {
+		iInjector->inject(sTarget, sDll);
+		logInfo(L"Finished injecting");
+		system("PAUSE");
+	}
+	if(option == 0 || option == 2)
+	{
+		iInjector->free(sTarget, sDll);
+		logInfo(L"Ejected!");
+		system("PAUSE");
+	}
 	delete iInjector;
 	return 0;
 }

@@ -26,13 +26,16 @@ HANDLE RemoteThreadInjector::CallWithRemoteThread(HANDLE hProcess, LPVOID hModul
 void RemoteThreadInjector::CallDLLMethod(const std::string& cDllPath, const std::string& method) const
 {
 	auto hModule = LoadLibraryW(std::wstring(cDllPath.begin(), cDllPath.end()).c_str());
-	auto procAddress = GetProcAddress(hModule, method.c_str());
-	typedef void (__stdcall * icfunc)();
-	icfunc DLLMethod;
-	DLLMethod = icfunc(procAddress);
-	DLLMethod();
+	if (hModule != nullptr)
+	{
+		auto procAddress = GetProcAddress(hModule, method.c_str());
+		typedef void (__stdcall * icfunc)();
+		icfunc DLLMethod;
+		DLLMethod = icfunc(procAddress);
+		DLLMethod();
 
-	FreeLibrary(hModule);
+		FreeLibrary(hModule);
+	}
 }
 
 void RemoteThreadInjector::do_inject(HANDLE hProcess, const std::string cDllPath)
