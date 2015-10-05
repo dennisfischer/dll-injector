@@ -25,7 +25,6 @@ int main(const int argc, const char* argv[])
 	iInjector->free(sTarget, sDll);
 	logInfo(L"Ejected!");
 	delete iInjector;
-	system("PAUSE");
 	return 0;
 }
 
@@ -37,7 +36,7 @@ void SetDebugPrivilege()
 	LUID luid;
 
 	OpenProcessToken(hProcess, TOKEN_ADJUST_PRIVILEGES, &hToken);
-	LookupPrivilegeValue(nullptr, L"seDebugPrivilege", &luid);
+	LookupPrivilegeValueW(nullptr, L"seDebugPrivilege", &luid);
 
 	priv.PrivilegeCount = 1;
 	priv.Privileges[0].Luid = luid;

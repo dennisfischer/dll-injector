@@ -9,7 +9,7 @@ Injector::~Injector()
 }
 
 
-HANDLE Injector::CreateProcessHandle(unsigned long dwProcessId)
+HANDLE Injector::CreateProcessHandle(unsigned long dwProcessId) const
 {
 	auto hProcess = OpenProcess(PROCESS_ALL_ACCESS, false, dwProcessId);
 	if (!hProcess)
@@ -20,7 +20,7 @@ HANDLE Injector::CreateProcessHandle(unsigned long dwProcessId)
 	return hProcess;
 }
 
-HANDLE Injector::CreateProcessHandleByName(const std::string cProcessName)
+HANDLE Injector::CreateProcessHandleByName(const std::string cProcessName) const
 {
 	auto dwProcessId = GetProcessIdFromProcessName(cProcessName);
 	if (dwProcessId == 0)
@@ -81,6 +81,8 @@ unsigned long Injector::GetProcessIdFromProcessName(const std::string cProcessNa
 	{
 		if (wcsstr(pe.szExeFile, std::wstring(cProcessName.begin(), cProcessName.end()).c_str()))
 		{
+			logInfo(L"Found process with pid: " + std::to_wstring(pe.th32ProcessID));
+
 			return pe.th32ProcessID;
 		}
 		retVal = Process32NextW(hSnapShot, &pe);
