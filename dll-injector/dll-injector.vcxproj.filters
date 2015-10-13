@@ -24,17 +24,20 @@
     <ClInclude Include="targetver.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="RemoteThreadInjector.h">
-      <Filter>Quelldateien</Filter>
+    <ClInclude Include="AppInitDLLInjector.h">
+      <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Injector.h">
-      <Filter>Quelldateien</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowsHookInjector.h">
-      <Filter>Quelldateien</Filter>
+      <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Logger.h">
-      <Filter>Quelldateien</Filter>
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="RemoteThreadInjector.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsHookInjector.h">
+      <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +57,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Logger.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="AppInitDLLInjector.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

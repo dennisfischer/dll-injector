@@ -145,6 +145,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AppInitDLLInjector.h" />
     <ClInclude Include="Injector.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="RemoteThreadInjector.h" />
@@ -153,6 +154,7 @@
     <ClInclude Include="WindowsHookInjector.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AppInitDLLInjector.cpp" />
     <ClCompile Include="dll-injector.cpp" />
     <ClCompile Include="Injector.cpp" />
     <ClCompile Include="Logger.cpp" />
