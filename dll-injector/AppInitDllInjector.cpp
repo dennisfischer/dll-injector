@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 
-AppInitDllInjector::AppInitDllInjector(const std::string cDllPath): m_DllPath(cDllPath)
+AppInitDllInjector::AppInitDllInjector(const std::string cDllPath) : m_DllPath(cDllPath)
 {
 }
 
@@ -11,26 +11,39 @@ AppInitDllInjector::~AppInitDllInjector()
 
 void AppInitDllInjector::do_inject()
 {
-	std::wstring subKey = L"\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows";
+	std::wstring subKey = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Windows";
 	HKEY hKey = nullptr;
-	RegOpenKeyEx(HKEY_LOCAL_MACHINE, subKey.c_str(), 0, KEY_READ, &hKey);
+	long n = 0;
+	if ((n = RegOpenKeyEx(HKEY_LOCAL_MACHINE, subKey.c_str(), 0, KEY_WRITE, &hKey)) != ERROR_SUCCESS)
+	{
+		wchar_t buf[256];
+		FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, GetLastError(),
+		                                         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), buf, 256, nullptr);
 
+		logInfo(buf);
+		logInfo(std::to_wstring(n));
+	}
 
-	DWORD dwType = REG_SZ;
-	BYTE bData[64];  // 64 bytes long
-	DWORD dwDataLen = sizeof(bData);
-	RegQueryValueEx(hKey, L"Spooler", nullptr, &dwType, LPBYTE(&bData), &dwDataLen);
-	logInfo(L"Value is: " + std::to_string(static_cast<const char*>(bData)));
+	DWORD value = 1;
+
+	if ((n = RegSetValueEx(hKey, L"LoadAppInit_DLLs", 0, REG_DWORD, LPBYTE(&value), sizeof(DWORD))) != ERROR_SUCCESS)
+	{
+		wchar_t buf[256];
+		FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, GetLastError(),
+		                                         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), buf, 256, nullptr);
+
+		logInfo(buf);
+		logInfo(std::to_wstring(n));
+	}
+	RegFlushKey(hKey);
 
 	RegCloseKey(hKey);
 }
 
 void AppInitDllInjector::do_free()
 {
-	
 }
 
 void AppInitDllInjector::Release()
 {
-
 }
