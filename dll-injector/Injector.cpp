@@ -32,36 +32,14 @@ HANDLE Injector::CreateProcessHandleByName(const std::string cProcessName) const
 	return CreateProcessHandle(dwProcessId);
 }
 
-void Injector::inject(const std::string cProcessName, const std::string cDllPath)
+void Injector::inject()
 {
-	auto hProcess = CreateProcessHandleByName(cProcessName);
-	if (hProcess == nullptr)
-	{
-		return;
-	}
-
-	do_inject(hProcess, cDllPath);
-
-	if (!CloseHandle(hProcess))
-	{
-		logWarning(L"Couldn't close process handle", GetLastError());
-	}
+	do_inject();
 }
 
-void Injector::free(const std::string cProcessName, const std::string cDllPath)
+void Injector::free()
 {
-	auto hProcess = CreateProcessHandleByName(cProcessName);
-	if (hProcess == nullptr)
-	{
-		return;
-	}
-
-	do_free(hProcess, cDllPath);
-
-	if (!CloseHandle(hProcess))
-	{
-		logWarning(L"Couldn't close process handle", GetLastError());
-	}
+	do_free();
 }
 
 unsigned long Injector::GetProcessIdFromProcessName(const std::string cProcessName) const

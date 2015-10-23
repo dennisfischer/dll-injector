@@ -19,7 +19,6 @@
 #include "Injector.h"
 #include "RemoteThreadInjector.h"
 #include "WindowsHookInjector.h"
-#include "AppInitDllInjector.h"
 #include "Logger.h"
 
 #include <TlHelp32.h>

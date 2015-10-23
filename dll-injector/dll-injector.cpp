@@ -31,19 +31,21 @@ int main(const int argc, const char* argv[])
 
 	logInfo(L"Injecting DLL into " + std::wstring(sTarget.begin(), sTarget.end()));
 	//SetDebugPrivilege();
-	Injector* iInjector = new RemoteThreadInjector();
+	Injector* iInjector = new RemoteThreadInjector(sTarget, sDll);
 
 	if (option == 0 || option == 1) {
-		iInjector->inject(sTarget, sDll);
+		iInjector->inject();
 		logInfo(L"Finished injecting");
 		system("PAUSE");
 	}
 	if(option == 0 || option == 2)
 	{
-		iInjector->free(sTarget, sDll);
+		iInjector->free();
 		logInfo(L"Ejected!");
 		system("PAUSE");
 	}
+
+	iInjector->Release();
 	delete iInjector;
 	return 0;
 }

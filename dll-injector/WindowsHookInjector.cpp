@@ -1,16 +1,21 @@
 #include "stdafx.h"
 
-WindowsHookInjector::WindowsHookInjector()
-{
-}
-
 WindowsHookInjector::~WindowsHookInjector()
 {
 }
 
-void WindowsHookInjector::do_inject(HANDLE hProcess, const std::string cDllPath)
+
+void WindowsHookInjector::Release()
 {
-	auto hModule = LoadLibraryW(std::wstring(cDllPath.begin(), cDllPath.end()).c_str());
+	if (!CloseHandle(m_hProcess))
+	{
+		logWarning(L"Couldn't close process handle", GetLastError());
+	}
+}
+
+void WindowsHookInjector::do_inject()
+{
+	auto hModule = LoadLibraryW(std::wstring(m_DllPath.begin(), m_DllPath.end()).c_str());
 	if (hModule == nullptr)
 	{
 		return logError(L"Failed to load dll for hooking", GetLastError());
@@ -22,7 +27,7 @@ void WindowsHookInjector::do_inject(HANDLE hProcess, const std::string cDllPath)
 		return logError(L"Hook function not existing in dll module!", GetLastError());
 	}
 
-	auto threadId = GetMainThreadIdFromProcessHandle(hProcess);
+	auto threadId = GetMainThreadIdFromProcessHandle(m_hProcess);
 	if (threadId == 0)
 	{
 		return logError(L"Failed to find thread id from process handle.", threadId);
@@ -30,22 +35,22 @@ void WindowsHookInjector::do_inject(HANDLE hProcess, const std::string cDllPath)
 
 	std::cout << "Thread id is: " << threadId << std::endl;
 
-	hHook = SetWindowsHookExW(WH_GETMESSAGE, hProc, hModule, threadId);
+	m_hHook = SetWindowsHookExW(WH_GETMESSAGE, hProc, hModule, threadId);
 	if (!PostThreadMessageW(threadId, WM_APP + 1, 0, 0))
 	{
 		logError(L"Failed: ", GetLastError());
 	}
 
-	if (hHook == nullptr)
+	if (m_hHook == nullptr)
 	{
 		return logError(L"Failed to install hook", GetLastError());
 	}
 }
 
-void WindowsHookInjector::do_free(HANDLE hProcess, const std::string cDllPath)
+void WindowsHookInjector::do_free()
 {
-	if (hHook != nullptr)
+	if (m_hHook != nullptr)
 	{
-		UnhookWindowsHookEx(hHook);
+		UnhookWindowsHookEx(m_hHook);
 	}
 }

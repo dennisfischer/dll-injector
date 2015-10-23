@@ -3,8 +3,9 @@
 class Injector
 {
 public:
-	void inject(const std::string cProcessName, const std::string cDllPath);
-	void free(const std::string cProcessName, const std::string cDllPath);
+	void inject();
+	void free();
+	virtual void Release() = 0;
 	unsigned long GetProcessIdFromProcessName(const std::string cProcessName) const;
 	unsigned long GetMainThreadIdFromProcessHandle(HANDLE hProcess) const;
 	virtual ~Injector();
@@ -15,6 +16,6 @@ public:
 protected:
 	Injector();
 private:
-	virtual void do_inject(HANDLE hProcess, const std::string cDllPath) = 0;
-	virtual void do_free(HANDLE hProcess, const std::string cDllPath) = 0;
+	virtual void do_inject() = 0;
+	virtual void do_free() = 0;
 };
