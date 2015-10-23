@@ -1,5 +1,10 @@
 #include "stdafx.h"
 
+WindowsHookInjector::WindowsHookInjector(const std::string cProcessName, const std::string cDllPath): m_ProcessName(cProcessName), m_DllPath(cDllPath)
+{
+	m_hProcess = CreateProcessHandleByName(cProcessName);
+}
+
 WindowsHookInjector::~WindowsHookInjector()
 {
 }
