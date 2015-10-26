@@ -15,4 +15,4 @@ ToDo:
 
 
 Sources
-*[1] http://www.autosectools.com/IAT-Hooking-Revisited.pdf
+* [1] http://www.autosectools.com/IAT-Hooking-Revisited.pdf
