@@ -2,7 +2,7 @@ This repository contains sample code for dll and code injection. Currently 3 way
 * CreateRemoteThread & LoadLibrary (RemoteThreadInjector)
 * SetWindowsHookEx (WindowsHookInjector)
 * AppInit_DLLs (AppInitDllInjector, requires **admin** privileges!)
-* IAT Hooks [1] (IATHookInjector, fails with Error 299)
+* IAT Hooks [1]-(IATHookInjector, fails with Error 299)
 
 Injection techniques for more direct code injection will be added soon!
 ToDo:
@@ -15,4 +15,4 @@ ToDo:
 
 
 Sources
-[1]: http://www.autosectools.com/IAT-Hooking-Revisited.pdf
+[1] http://www.autosectools.com/IAT-Hooking-Revisited.pdf
