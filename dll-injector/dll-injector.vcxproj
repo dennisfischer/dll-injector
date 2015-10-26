@@ -134,6 +134,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AppInitDllInjector.h" />
+    <ClInclude Include="IATHookInjector.h" />
     <ClInclude Include="Injector.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="RemoteThreadInjector.h" />
@@ -154,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="AppInitDllInjector.cpp" />
     <ClCompile Include="dll-injector.cpp" />
+    <ClCompile Include="IATHookInjector.cpp" />
     <ClCompile Include="Injector.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="RemoteThreadInjector.cpp" />

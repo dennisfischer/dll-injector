@@ -36,6 +36,9 @@
     <ClInclude Include="AppInitDllInjector.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="IATHookInjector.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -57,6 +60,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="AppInitDllInjector.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="IATHookInjector.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
