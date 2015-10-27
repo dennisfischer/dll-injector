@@ -6,8 +6,7 @@ This repository contains sample code for dll and code injection. Currently 3 way
 
 Injection techniques for more direct code injection will be added soon!
 ToDo:
-* Code Cave injection
-* CreateRemoteThread + "direct" code injection (not using a dll / just using it's contents)
+* CreateRemoteThread + "direct" code injection (not using a dll / just using it's contents / "Code Cave Injection")
 * Function Detours
 * PE Header modification
 * DLL Replacement
