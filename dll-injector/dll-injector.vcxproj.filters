@@ -39,6 +39,9 @@
     <ClInclude Include="IATHookInjector.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="NopHoppingInjector.h">
+      <Filter>Quelldateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -64,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="IATHookInjector.cpp">
       <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="NopHoppingInjector.cpp">
+      <Filter>Headerdateien</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

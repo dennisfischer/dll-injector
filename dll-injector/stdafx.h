@@ -18,10 +18,14 @@
 #include <DbgHelp.h>
 #include <Ntsecapi.h>
 #include <TlHelp32.h>
+#include <vector>
+#include <map>
+#include <memory>
 
 #include "Injector.h"
 #include "RemoteThreadInjector.h"
 #include "WindowsHookInjector.h"
 #include "AppInitDllInjector.h"
 #include "IATHookInjector.h"
+#include "NopHoppingInjector.h"
 #include "Logger.h"

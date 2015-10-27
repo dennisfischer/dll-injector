@@ -61,16 +61,16 @@ DWORD IATHookInjector::FindRemotePEB(HANDLE hProcess) const
 	auto pBasicInfo = new PROCESS_BASIC_INFORMATION();
 	DWORD dwReturnLength = 0;
 	ntQueryInformationProcess(hProcess, 0, pBasicInfo, sizeof(PROCESS_BASIC_INFORMATION), &dwReturnLength);
-	return pBasicInfo->PebBaseAddress;
+	return DWORD(pBasicInfo->PebBaseAddress);
 }
 
 PEB* IATHookInjector::ReadRemotePEB(HANDLE hProcess) const
 {
 	auto dwPEBAddress = FindRemotePEB(hProcess);
 	printf("PEB Address: 0x%x\n", dwPEBAddress);
-	auto pPEB = new PEB();
+	PEB* pPEB = new PEB();
 	SIZE_T* bytesRead = nullptr;
-	auto bSuccess = ReadProcessMemory(hProcess, LPCVOID(dwPEBAddress), pPEB, sizeof(PEB), bytesRead);
+	auto bSuccess = ReadProcessMemory(hProcess, LPCVOID(dwPEBAddress), pPEB, sizeof(_PEB), bytesRead);
 	printf("ReadProcMemory %d\n", GetLastError());
 	printf("Read: %p\n", bytesRead);
 

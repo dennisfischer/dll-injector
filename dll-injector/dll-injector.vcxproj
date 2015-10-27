@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AppInitDllInjector.h" />
+    <ClInclude Include="NopHoppingInjector.h" />
     <ClInclude Include="IATHookInjector.h" />
     <ClInclude Include="Injector.h" />
     <ClInclude Include="Logger.h" />
@@ -155,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppInitDllInjector.cpp" />
+    <ClCompile Include="NopHoppingInjector.cpp" />
     <ClCompile Include="dll-injector.cpp" />
     <ClCompile Include="IATHookInjector.cpp" />
     <ClCompile Include="Injector.cpp" />
