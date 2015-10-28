@@ -22,8 +22,8 @@ void NopHoppingInjector::do_inject()
 #else
 #error "Unsupported architecture"
 #endif
-	DisasmFnc = (pDisasmFnc)GetProcAddress(hBeaEngine, "Disasm");
-	if (DisasmFnc == nullptr)
+//	DisasmFnc = (pDisasmFnc)GetProcAddress(hBeaEngine, "Disasm");
+//	if (DisasmFnc == nullptr)
 	{
 		fprintf(stderr, "Could not get Disasm function from BeaEngine.\n");
 		exit(-1);
@@ -79,50 +79,50 @@ using NopRangeList = std::vector<NopRange>;
 using ModuleMap = std::map<ModuleName, AddressRange>;
 using ExecutableMap = std::map<ModuleName, ExecutableRegionsList>;
 
-using pDisasmFnc = int(__stdcall *)(DISASM* pMonDisasm);
-pDisasmFnc DisasmFnc = nullptr;
+//using pDisasmFnc = int(__stdcall *)(DISASM* pMonDisasm);
+//pDisasmFnc DisasmFnc = nullptr;
 
 InstructionList NopHoppingInjector::GetInstructionList(const unsigned char* const pBytes, const size_t ulSize, const DWORD_PTR dwOffset, const bool bNopsOnly = false)
 {
 	InstructionList instructionList;
 
-	DISASM disasm = {0};
+//	DISASM disasm = {0};
 #ifdef _M_IX86
 	//Do nothing
 #elif defined(_M_AMD64)
-	disasm.Archi = 64;
+//	disasm.Archi = 64;
 #else
 #error "Unsupported architecture"
 #endif
 
-	disasm.EIP = (UIntPtr)pBytes;
+//	disasm.EIP = (UIntPtr)pBytes;
 	int iLength = 0;
 	int iLengthTotal = 0;
 	do
 	{
-		iLength = DisasmFnc(&disasm);
-		if (iLength != UNKNOWN_OPCODE)
+//		iLength = DisasmFnc(&disasm);
+//		if (iLength != UNKNOWN_OPCODE)
 		{
-			const DWORD_PTR dwInstructionStart = (DWORD_PTR)(disasm.EIP);
+//			const DWORD_PTR dwInstructionStart = (DWORD_PTR)(disasm.EIP);
 			if (bNopsOnly)
 			{
-				if (disasm.Instruction.Opcode == NOP)
+//				if (disasm.Instruction.Opcode == NOP)
 				{
-					instructionList.push_back(dwInstructionStart + dwOffset);
+//					instructionList.push_back(dwInstructionStart + dwOffset);
 				}
 			}
 			else
 			{
-				instructionList.push_back(dwInstructionStart + dwOffset);
+//				instructionList.push_back(dwInstructionStart + dwOffset);
 			}
 
 			iLengthTotal += iLength;
-			disasm.EIP += iLength;
+//			disasm.EIP += iLength;
 		}
-		else
+//		else
 		{
 			++iLengthTotal;
-			++disasm.EIP;
+	//		++disasm.EIP;
 		}
 	}
 	while (iLengthTotal < ulSize);

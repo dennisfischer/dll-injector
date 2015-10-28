@@ -5,10 +5,7 @@
 class RemoteThreadInjector : public Injector
 {
 public:
-	RemoteThreadInjector(const std::string cProcessName, const std::string cDllPath) : m_ProcessName(cProcessName), m_DllPath(cDllPath)
-	{
-		m_hProcess = CreateProcessHandleByName(cProcessName);
-	};
+	RemoteThreadInjector(const std::string cProcessName, const std::string cDllPath);;
 	virtual ~RemoteThreadInjector();
 	void Release() override;
 	HANDLE CallWithRemoteThread(LPVOID hModule, LPVOID lp_base_address) const;
