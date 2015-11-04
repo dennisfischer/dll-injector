@@ -11,7 +11,7 @@ Injector::~Injector()
 
 HANDLE Injector::CreateProcessHandle(unsigned long dwProcessId) const
 {
-	auto hProcess = OpenProcess(PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE, false, dwProcessId);
+	auto hProcess = OpenProcess(PROCESS_ALL_ACCESS, false, dwProcessId);
 	if (!hProcess)
 	{
 		logError(L"Couldn' t receive process handle", GetLastError());

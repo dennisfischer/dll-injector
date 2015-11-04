@@ -28,4 +28,5 @@
 #include "AppInitDllInjector.h"
 #include "IATHookInjector.h"
 #include "NopHoppingInjector.h"
+#include "APCInjector.h"
 #include "Logger.h"

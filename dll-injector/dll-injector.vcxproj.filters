@@ -42,6 +42,9 @@
     <ClInclude Include="NopHoppingInjector.h">
       <Filter>Quelldateien</Filter>
     </ClInclude>
+    <ClInclude Include="APCInjector.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -70,6 +73,9 @@
     </ClCompile>
     <ClCompile Include="NopHoppingInjector.cpp">
       <Filter>Headerdateien</Filter>
+    </ClCompile>
+    <ClCompile Include="APCInjector.cpp">
+      <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
