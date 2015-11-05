@@ -30,7 +30,7 @@ int main(const int argc, const char* argv[])
 	}
 
 	logInfo(L"Injecting DLL into " + std::wstring(sTarget.begin(), sTarget.end()));
-	SetDebugPrivilege();
+	//SetDebugPrivilege();
 	Injector* iInjector = new RemoteThreadInjector(sTarget, sDll);
 
 	if (option == 0 || option == 1) {

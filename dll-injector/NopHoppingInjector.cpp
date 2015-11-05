@@ -36,8 +36,6 @@ void NopHoppingInjector::do_inject()
 	HMODULE hModule = LoadLibrary(L"user32.dll");
 	DWORD_PTR dwTargetAddress = DWORD_PTR(GetProcAddress(hModule, "MessageBoxA"));
 
-#ifdef _M_IX86
-#elif defined(_M_AMD64)
 	DWORD dwHigh = (dwTargetAddress >> 32) & 0xFFFFFFFF;
 	DWORD dwLow = (dwTargetAddress) & 0xFFFFFFFF;
 
@@ -56,9 +54,6 @@ void NopHoppingInjector::do_inject()
 	memcpy(&pBytes[11], &dwLow, sizeof(DWORD));
 	memcpy(&pBytes[19], &dwHigh, sizeof(DWORD));
 
-#else
-#error "Unsupported platform"
-#endif
 
 	auto thread = WriteCodeToRegions(handle, executableRegions, pBytes, sizeof(pBytes) - 1);
 
@@ -256,16 +251,11 @@ InstructionList NopHoppingInjector::SelectRegions(const HANDLE hProcess, const N
 
 bool NopHoppingInjector::WriteJumps(const HANDLE hProcess, const InstructionList& writeInstructions, const InstructionList& selectedRegions)
 {
-#ifdef _M_IX86
-#elif defined (_M_AMD64)
 	unsigned char jmpBytes[] =
 		{
 			0x48, 0xB8, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, /*mov rax, 0xBBBBBBBBBBBBBBBB*/
 			0xFF, 0xE0 /*jmp rax*/
 		};
-#else
-#error "Unsupported architecture"
-#endif
 
 	auto firstElem = selectedRegions.begin();
 	auto nextElem = ++firstElem;
@@ -279,7 +269,7 @@ bool NopHoppingInjector::WriteJumps(const HANDLE hProcess, const InstructionList
 		bool bSuccess = BOOLIFY(VirtualProtectEx(hProcess, (LPVOID)*firstElem, dwInstructionSize, PAGE_EXECUTE_READWRITE, &dwOldProtect));
 		if (bSuccess)
 		{
-			size_t ulBytesWritten = 0;
+			SIZE_T ulBytesWritten = 0;
 			bSuccess = BOOLIFY(WriteProcessMemory(hProcess, (LPVOID)*firstElem, (LPCVOID)writeInstructions[i++], dwInstructionSize, &ulBytesWritten));
 
 			DWORD_PTR dwNextAddress = *nextElem;
