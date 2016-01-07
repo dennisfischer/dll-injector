@@ -6,7 +6,7 @@ void SetDebugPrivilege();
 
 int main(const int argc, const char* argv[])
 {
-	if (argc != 3 && argc != 4)
+	if (argc != 3 && argc != 4 && argc != 5)
 	{
 		logError(L"Not enough arguments, requiring 2: <target> <dll> [<0|default 1|inject, 2|eject>]!", argc);
 		system("PAUSE");
@@ -17,9 +17,16 @@ int main(const int argc, const char* argv[])
 	std::string sDll(argv[2]);
 
 	auto option = 0;
-	if(argc == 4)
+	auto isRemoteThread = true;
+
+	if(argc > 3)
 	{
-		option = atoi(argv[3]);
+		isRemoteThread = atoi(argv[3]) == 0 ? true : false;
+	}
+
+	if(argc == 5)
+	{
+		option = atoi(argv[4]);
 
 		if(option>2 || option < 0)
 		{
@@ -31,7 +38,15 @@ int main(const int argc, const char* argv[])
 
 	logInfo(L"Injecting DLL into " + std::wstring(sTarget.begin(), sTarget.end()));
 	//SetDebugPrivilege();
-	Injector* iInjector = new RemoteThreadInjector(sTarget, sDll);
+	Injector* iInjector = nullptr;
+
+	if(isRemoteThread)
+	{
+		iInjector = new RemoteThreadInjector(sTarget, sDll);
+	} else
+	{
+		iInjector = new WindowsHookInjector(sTarget, sDll);
+	}
 
 	if (option == 0 || option == 1) {
 		iInjector->inject();
